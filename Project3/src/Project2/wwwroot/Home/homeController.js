@@ -7,7 +7,7 @@
             $scope.title = 'homeController';
             $scope.searchType = 'repo';
             $scope.searchText = '';
-            $scope.test = function () {
+            $scope.search = function () {
                 if ($scope.searchType == 'repo') {
                     toastr.warning($scope.searchText + ' yay!! repo');
 
@@ -21,9 +21,5 @@
                     toastr.warning('oops');
                 }
             }
-
-            activate();
-
-            function activate() { }
-        });    
+        });   
 })();

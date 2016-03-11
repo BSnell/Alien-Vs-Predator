@@ -18,7 +18,7 @@
 
             function getRepo(searchText) {
                 var deferred = $q.defer();
-                $http.get('https://api.github.com/search/repositories?q='+searchText+'&1,10').then(
+                $http.get('https://api.github.com/search/repositories?q=' + searchText +'&1,10').then(
                     function handleSuccess(response) {
                         console.log('github response received');
                         deferred.resolve(response.data.avatar_url);

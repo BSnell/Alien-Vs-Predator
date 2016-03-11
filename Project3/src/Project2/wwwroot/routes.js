@@ -11,9 +11,9 @@
             // Now set up the states
             $stateProvider
               .state('home', {
-                  url: "/",
-                  templateUrl: "Home/home.html",
-                  controller: "homeController"
+                url: "/",
+                templateUrl: "Home/home.html",
+                controller: "homeController"
               })
             .state('userSearch', {
                 url: "/userSearch",
@@ -22,6 +22,7 @@
             .state('repoSearch', {
                 url: "/repoSearch",
                 templateUrl: "repoSearch/repoSearch.html",
+                controller: "repoSearchController"
             })
         });
 
