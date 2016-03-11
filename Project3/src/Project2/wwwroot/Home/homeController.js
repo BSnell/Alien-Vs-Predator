@@ -3,31 +3,27 @@
 
     angular
         .module('app')
-        .controller('homeController', ['$scope', 'userGithubService', homeController]);
+        .controller('homeController', function ($scope, userGithubService, repoGithubService) {
+            $scope.title = 'homeController';
+            $scope.searchType = 'repo';
+            $scope.searchText = '';
+            $scope.test = function () {
+                if ($scope.searchType == 'repo') {
+                    toastr.warning($scope.searchText + ' yay!! repo');
 
-    homeController.$inject = ['$scope'];
-
-    function homeController($scope, userGithubService) {
-        $scope.title = 'homeController';
-        $scope.searchType = 'repo';
-        $scope.searchText = '';
-        $scope.test = function () {
-            if ($scope.searchType == 'repo') {
-                toastr.warning($scope.searchText + ' yay!!');
-                userGithubService.getUser($scope.searchText);
+                    repoGithubService.getRepo($scope.searchText);
+                }
+                else if ($scope.searchType == 'user') {
+                    toastr.warning(scope.searchText + ' yay!! user');
+                    userGithubService.getUser($scope.searchText);
+                }
+                else {
+                    toastr.warning('oops');
+                }
             }
-            else if ($scope.searchType == 'user') {
-                toastr.warning(scope.searchText + ' yay!!');
-            }
-            else {
-                toastr.warning('oops');
-            }
-        }
 
-        activate();
+            activate();
 
-        function activate() { }
-
-        
-    }
+            function activate() { }
+        });    
 })();

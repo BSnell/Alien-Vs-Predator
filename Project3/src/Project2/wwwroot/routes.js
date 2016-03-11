@@ -19,6 +19,10 @@
                 url: "/userSearch",
                 templateUrl: "userSearch/userSearch.html",
             })
+            .state('repoSearch', {
+                url: "/repoSearch",
+                templateUrl: "repoSearch/repoSearch.html",
+            })
         });
 
 })();
