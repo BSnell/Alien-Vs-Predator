@@ -1,0 +1,95 @@
+﻿<body ng-controller="repoController">
+    <center>
+        <h1>
+            {{data.name}}
+        </h1>
+        <h3>
+            Owner: {{data.owner.login}}
+        </h3>
+        <h4>
+            <span ng-if="data.language != null">Language: {{data.language}}</span>
+            <span ng-if="data.language == null">Language: N/A</span>
+        </h4>
+    </center>
+    <div>
+        <a href="{{data.html_url}}">Link to Github.com</a>
+        <a href="{{data.clone_url}}">Link to clone</a>
+    </div>
+    <div>
+        <span ng-if="data.description != null">Description of repo: {{data.description}}</span>
+        <span ng-if="data.description == null">Description of repo: N/A</span>
+    </div>
+    <div>
+        <ul>
+            <li>star count: {{data.stargazers_count}}</li>
+            <li>watcher count: {{data.watchers_count}}</li>
+            <li>fork count: {{data.forks_count}}</li>
+            <li>issue count: {{data.open_issues_count}}</li>
+        </ul>
+    </div>
+    <div>
+        <table class="table table-striped" ng-if="commits.length > 0">
+            <tr>
+                <th>
+                    Commit Author
+                </th>
+                <th>
+                    Commit Message
+                </th>
+                <th>
+                    Commit URL
+                </th>
+                <th>
+                    Commit Comment Count
+                </th>
+            </tr>
+            <tr ng-repeat="x in commits|limitTo:5">
+                <td>
+                    {{x.commit.author.name}}
+                </td>
+                <td>
+                    {{x.commit.message}}
+                </td>
+                <td>
+                    <a href="{{x.html_url}}">Link</a>
+                </td>
+                <td>
+                    {{x.commit.comment_count}}
+                </td>
+            </tr>
+        </table>
+        <div ng-if="!commits.length > 0">
+            This repo has no commits
+        </div>
+    </div>
+    <div ng-if="issues.length > 0">
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    Issue Title
+                </th>
+                <th>
+                    Issue Created
+                </th>
+                <th>
+                    Issue Link
+                </th>
+            </tr>
+            <tr ng-repeat="x in issues.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                <td>
+                    {{x.title}}
+                </td>
+                <td>
+                    {{x.created_at}}
+                </td>
+                <td>
+                    <a href="{{x.html_url}}">Link</a>
+                </td>
+            </tr>
+        </table>
+        <pager total-items="issues.length" ng-model="currentPage" items-per-page="itemsPerPage"></pager>
+    </div>
+    <div ng-if="!issues.length > 0">
+        This repo has no issues
+    </div>
+</body>

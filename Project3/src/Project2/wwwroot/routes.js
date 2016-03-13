@@ -4,25 +4,22 @@
     angular
         .module('app')
         .config(function ($stateProvider, $urlRouterProvider) {
-            //
-            // For any unmatched url, redirect to /state1
             $urlRouterProvider.otherwise("/");
-            //
-            // Now set up the states
             $stateProvider
               .state('home', {
                 url: "/",
                 templateUrl: "Home/home.html",
                 controller: "homeController"
               })
-            .state('userSearch', {
-                url: "/userSearch",
-                templateUrl: "userSearch/userSearch.html",
+            .state('user', {
+                url: "/user/{user}",
+                templateUrl: "user/user.html",
+                controller: "userController"
             })
-            .state('repoSearch', {
-                url: "/repoSearch",
-                templateUrl: "repoSearch/repoSearch.html",
-                controller: "repoSearchController"
+            .state('repo', {
+                url: "/repo/{owner}/{repo}",
+                templateUrl: "repo/repo.html",
+                controller: "repoController"
             })
         });
 

@@ -1,0 +1,81 @@
+﻿<body ng-controller="userController">
+    <center>
+        <h2>
+            {{data.login}}
+        </h2>
+        <div>
+            <img src="{{data.avatar_url}}" height="150" width="150"/>
+        </div>
+    </center>
+    <div>
+        <span ng-if="data.name != null">Name: {{data.name}}<br /></span>
+        <span ng-if="!data.name != null">Name: N/A<br /></span>
+        <span ng-if="data.location != null">Location: {{data.location}}<br /></span>
+        <span ng-if="!data.location != null">Location: N/A<br /></span>
+        <span ng-if="data.blog != null">Blog: {{blog}}</span>
+        <span ng-if="!data.blog != null">Blog: N/A</span>
+    </div>
+    <div>
+        <a href="{{data.html_url}}">Link to Github Profile</a>
+    </div>
+    <table class="table table-striped" ng-if="!repos.length <=0">
+        <tr>
+            <th>
+                Repo Name
+            </th>
+            <th>
+                Stars
+            </th>
+            <th>
+                Open Issues
+            </th>
+            <th>
+                Language
+            </th>
+            <th>
+                Link to Repo
+            </th>
+        </tr>
+        <tr ng-repeat="x in repos" >
+            <td>
+                {{x.name}}
+            </td>
+            <td>
+                {{x.stargazers_count}}
+            </td>
+            <td>
+                {{open_issues_count}}
+            </td>
+            <td>
+                {{x.language}}
+            </td>
+            <td>
+                <a ui-sref="repo({owner: '{{x.owner.login}}', repo:'{{x.name}}'})">link</a>
+            </td>
+        </tr>
+    </table>
+    <div ng-if="repos.length <=0">
+        This user has no public repos
+    </div>
+    <table class="table table-striped" ng-if="!followers.length <= 0">
+        <tr>
+            <th>
+                Follower Avatar
+            </th>
+            <th>
+                Follower Login ID
+            </th>
+        </tr>
+        <tr ng-repeat="x in followers">
+            <td>
+                <img src="{{x.avatar_url}}" height="100" width="100"/>
+            </td>
+            <td>
+                {{x.login}}
+            </td>
+        </tr>
+    </table>
+    <div ng-if="followers.length <= 0">
+        This user has no followers
+    </div>
+</body>
