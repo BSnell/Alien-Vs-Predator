@@ -14,5 +14,4 @@ namespace Project2.Models
         public bool State { get; set; }
         public string Tags { get; set; }
     }
-
 }

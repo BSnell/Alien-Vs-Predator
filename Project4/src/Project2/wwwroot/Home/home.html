@@ -1,9 +1,8 @@
 ﻿<body ng-controller="homeController">
     <h1>
         ToDos
-        <br />
-        {{date}}
     </h1>
+    <div id="datetime"></div>
     <h3>
         Incomplete ToDos
     </h3>
@@ -48,7 +47,7 @@
                 Action
             </th>
         </tr>
-        <tr ng-repeat="x in data | filter: { state: 'false' } | orderBy: sortType:sortReverse | filter: searchDesc">
+        <tr ng-repeat="x in data | filter: { state: 'false' } | orderBy: sortType:sortReverse | filter: searchStuff">
             <td>
                 {{x.id}}
             </td>
