@@ -3,35 +3,33 @@
 
     angular
         .module('app')
-        .factory('repoGithubService', function ($q, $http) {
+        .factory('apiService', function ($q, $http) {
 
             var service = {
-                getRepo: getRepo,
-                getSingleRepo: getSingleRepo,
-                getCommits: getCommits,
-                getIssues: getIssues
+                getToDo: getToDo,
+                newToDo: newToDo,
+                updateToDo: updateToDo,
+                removeToDo: removeToDo
             };
 
             return service;
 
-            function getRepo(searchText, pageNumber) {
+            function getToDo() {
                 var deferred = $q.defer();
-                $http.get('https://api.github.com/search/repositories?q=' + searchText +'&page=' + pageNumber + '&per_page=10').then(
+                $http.get('api/todo').then(
                     function handleSuccess(response) {
-                        console.log('github response received');
-                        deferred.resolve(response.data.items);
+                        deferred.resolve(response.data);
                     },
                     function handleError(response) {
-                        toastr.warning(response.data.items);
+                        toastr.warning(response.data);
                     });
                 return deferred.promise;
             }
 
-            function getSingleRepo(owner, repo) {
+            function newToDo(data) {
                 var deferred = $q.defer();
-                $http.get('https://api.github.com/repos/' + owner + '/' + repo).then(
+                $http.post('api/todo', data).then(
                     function handleSuccess(response) {
-                        console.log('github response received');
                         deferred.resolve(response.data);
                     },
                     function handleError(response) {
@@ -39,11 +37,10 @@
                     });
                 return deferred.promise;
             }
-            function getCommits(owner, repo) {
+            function updateToDo(todo) {
                 var deferred = $q.defer();
-                $http.get('https://api.github.com/repos/' + owner + '/' + repo + '/' + 'commits').then(
+                $http.put('api/todo', todo).then(
                     function handleSuccess(response) {
-                        console.log('github response received');
                         deferred.resolve(response.data);
                     },
                     function handleError(response) {
@@ -51,11 +48,10 @@
                     });
                 return deferred.promise;
             }
-            function getIssues(owner, repo) {
+            function removeToDo(todo) {
                 var deferred = $q.defer();
-                $http.get('https://api.github.com/repos/' + owner + '/' + repo + '/' + 'issues').then(
+                $http.delete('api/todo/' + todo.id).then(
                     function handleSuccess(response) {
-                        console.log('github response received');
                         deferred.resolve(response.data);
                     },
                     function handleError(response) {

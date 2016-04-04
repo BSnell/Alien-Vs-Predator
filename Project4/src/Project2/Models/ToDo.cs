@@ -6,12 +6,13 @@ using Microsoft.AspNet.Authorization.Infrastructure;
 
 namespace Project2.Models
 {
-    public class Project
+    public class ToDo
     {
         public int Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
-
-        public IEnumerable<Requirement> Requirements { get; set; }
+        public string dueDate { get; set; }
+        public bool State { get; set; }
+        public string Tags { get; set; }
     }
+
 }

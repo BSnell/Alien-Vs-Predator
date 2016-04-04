@@ -8,6 +8,7 @@
     "angular": "1.4.6",
     "angular-ui-router": "0.2.18",
     "angular-bootstrap": "0.13.4",
-    "toastr": "2.1.2"
+    "toastr": "2.1.2",
+    "moment": "2.10.6"
   }
 }

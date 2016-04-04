@@ -6,15 +6,14 @@ using Microsoft.Data.Entity;
 
 namespace Project2.Models
 {
-    public class ProjectContext : DbContext
+    public class ToDoContext : DbContext
     {
-        public ProjectContext()
+        public ToDoContext()
         {
             Database.EnsureCreated();
         }
 
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<Requirement> Requirements { get; set; }
+        public DbSet<ToDo> ToDos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

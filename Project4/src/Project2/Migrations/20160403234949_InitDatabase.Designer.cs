@@ -7,8 +7,8 @@ using Project2.Models;
 
 namespace Project2.Migrations
 {
-    [DbContext(typeof(ProjectContext))]
-    [Migration("20160325183047_InitDatabase")]
+    [DbContext(typeof(ToDoContext))]
+    [Migration("20160403234949_InitDatabase")]
     partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,37 +17,36 @@ namespace Project2.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Project2.Models.Project", b =>
+            modelBuilder.Entity("Project2.Models.ToDo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+                    b.Property<bool>("State");
+
+                    b.Property<string>("Tags");
+
+                    b.Property<string>("dueDate");
 
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Project2.Models.Requirement", b =>
+            modelBuilder.Entity("Project2.Models.Warning", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+                    b.Property<bool>("State");
 
-                    b.Property<int?>("ProjectId");
+                    b.Property<string>("Tags");
+
+                    b.Property<string>("dueDate");
 
                     b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Project2.Models.Requirement", b =>
-                {
-                    b.HasOne("Project2.Models.Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
                 });
         }
     }

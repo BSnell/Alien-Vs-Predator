@@ -1,99 +1,165 @@
 ﻿<body ng-controller="homeController">
-    <form method="get" ng-submit="initialSearch()">
+    <h1>
+        ToDos
+        <br />
+        {{date}}
+    </h1>
+    <h3>
+        Incomplete ToDos
+    </h3>
+    <form>
         <div class="form-group">
-            <label>Search for: </label>
-            <input type="radio" name="Search" value="repo" ng-model="searchType"/>Repo 
-            <input type="radio" name="Search" value="user" ng-model="searchType"/>User
-        </div>
-        <div class="form-group">
-            <label>Keyword to search for:</label>
-            <input class="form-control" type="text" ng-model="searchText" required/>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary" type="submit"> Search Github!</button>
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search ToDo Description" ng-model="searchDesc">
+            </div>
         </div>
     </form>
-    <table class="table table-striped" ng-show="searchedFor == 'repo'" ng-if="data.length > 0">
+    <table class="table table-striped" ng-if="data.length > 0">
         <tr>
             <th>
-                Owner Avatar
+                <a href="#" ng-click="sortType = 'id'; sortReverse = !sortReverse">
+                    ID
+                    <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
             </th>
             <th>
-                Repo Name
+                <a href="#" ng-click="sortType = 'description'; sortReverse = !sortReverse">
+                    Description
+                    <span ng-show="sortType == 'description' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'description' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
             </th>
             <th>
-                Open Issues
+                <a href="#" ng-click="sortType = 'dueDate'; sortReverse = !sortReverse">
+                    Due Date
+                    <span ng-show="sortType == 'dueDate' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'dueDate' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
             </th>
             <th>
-                Stars
+                Tags
             </th>
             <th>
-                Language
+                Complete
             </th>
             <th>
-                Link to repo
+                Action
             </th>
         </tr>
-        <tr ng-repeat="x in data">
+        <tr ng-repeat="x in data | filter: { state: 'false' } | orderBy: sortType:sortReverse | filter: searchDesc">
             <td>
-                <img src="{{x.owner.avatar_url}}" height="100" width="100"/>
+                {{x.id}}
             </td>
             <td>
-                {{x.full_name}}
-            </td>
-            <td ng-switch on="x.open_issues_count">
-                <div ng-switch-when="0">No open issues</div>
-                <div ng-switch-default>{{x.open_issues_count}}</div>
-            </td>
-            <td>
-                {{x.stargazers_count}}
+                <div ng-hide="editingData[x.id]">
+                    <font color="red" ng-show="x.isRed == true">{{x.description}}</font>
+                    <font color="black" ng-show="x.isRed == false">{{x.description}}</font>
+                </div>
+                <div ng-show="editingData[x.id]"><input type="text" ng-model="x.description" /></div>
             </td>
             <td>
-                {{x.language}}
+                <div ng-hide="editingData[x.id]">{{x.dueDate | date:'M/d/yyyy HH:mm'}}</div>
+                <div ng-show="editingData[x.id]"><input type="datetime-local" ng-model="x.dueDate" /></div>
             </td>
             <td>
-                <a ui-sref="repo({owner: '{{x.owner.login}}', repo:'{{x.name}}'})">link</a>
+                <div ng-hide="editingData[x.id]">{{x.tags}}</div>
+                <div ng-show="editingData[x.id]"><input type="text" ng-model="x.tags" /></div>
+            </td>
+            <td>
+                {{x.state}}
+            </td>
+            <td>
+                <button ng-hide="editingData[x.id]" ng-click="modify(x)">Modify</button>
+                <button ng-show="editingData[x.id]" ng-click="update(x)">Update</button>
+                <button ng-hide="viewField" ng-click="completeToDo(x)">Complete</button>
+                <button ng-hide="viewField" ng-click="removeToDo(x)">Remove</button>
             </td>
         </tr>
     </table>
-    <div ng-show="searchedFor == 'repo'" ng-if="!data.length > 0">
-        No results found.
+    <div ng-if="!data.length > 0">
+        No ToDos found.
     </div>
-    <table class="table table-striped" ng-show="searchedFor == 'user'" ng-if="data.length > 0">
+    <h3>
+        Complete ToDos
+    </h3>
+    <table class="table table-striped" ng-if="data.length > 0">
         <tr>
             <th>
-                User Avatar
+                <a href="#" ng-click="sortType = 'id'; sortReverse = !sortReverse">
+                    ID
+                    <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
             </th>
             <th>
-                Login ID
+                <a href="#" ng-click="sortType = 'description'; sortReverse = !sortReverse">
+                    Description
+                    <span ng-show="sortType == 'description' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'description' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
             </th>
             <th>
-                Link to user
+                <a href="#" ng-click="sortType = 'dueDate'; sortReverse = !sortReverse">
+                    Due Date
+                    <span ng-show="sortType == 'dueDate' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'dueDate' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th>
+                Tags
+            </th>
+            <th>
+                Complete
+            </th>
+            <th>
+                Action
             </th>
         </tr>
-        <tr ng-repeat="x in data">
+        <tr ng-repeat="x in data | filter: { state: 'true' } | orderBy:sortType:sortReverse | filter: searchDesc">
             <td>
-                <img src="{{x.avatar_url}}" height="100" width="100" />
+                {{x.id}}
             </td>
             <td>
-                {{x.login}}
+                <div ng-hide="editingData[x.id]">{{x.description}}</div>
+                <div ng-show="editingData[x.id]"><input type="text" ng-model="x.description" /></div>
             </td>
             <td>
-                <a ui-sref="user({user: '{{x.login}}'})">link</a>
+                <div ng-hide="editingData[x.id]">{{x.dueDate | date:'M/d/yyyy HH:mm'}}</div>
+                <div ng-show="editingData[x.id]"><input type="datetime-local" ng-model="x.dueDate" /></div>
+            </td>
+            <td>
+                <div ng-hide="editingData[x.id]">{{x.tags}}</div>
+                <div ng-show="editingData[x.id]"><input type="text" ng-model="x.tags" /></div>
+            </td>
+            <td>
+                {{x.state}}
+            </td>
+            <td>
+                <button ng-hide="viewField" ng-click="removeToDo(x)">Remove</button>
             </td>
         </tr>
     </table>
-    <div ng-show="searchedFor == 'user'" ng-if="!data.length > 0">
-        No results found.
+    <div ng-if="!data.length > 0">
+        No ToDos found.
     </div>
-    <div ng-show="searchPerformed" ng-if="data.length > 0">
-        <ui class="pager">
-            <li class="previous">
-                <a href="#" ng-click="prevPage()">Previous</a>
-            </li>
-            <li class="next">
-                <a href="#" ng-click="nextPage()">Next</a>
-            </li>
-        </ui>
-    </div>
+    <br />
+    <form method="get" ng-submit="newToDo()">
+        <div class="form-group">
+            <label>Description: </label>
+            <input class="form-control" type="text" ng-model="description" required />
+        </div>
+        <div class="form-group">
+            <label>dueDate: </label>
+            <input class="form-control" type="datetime-local" ng-model="dueDate" required />
+        </div>
+        <div class="form-group">
+            <label>Tags(seperated by commas): </label>
+            <input class="form-control" type="text" ng-model="tags" required />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit"> Create New ToDo</button>
+        </div>
+    </form>
 </body>

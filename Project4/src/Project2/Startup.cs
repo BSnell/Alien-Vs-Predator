@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Project2.Models;
+using Project2.Repositories;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,18 +35,19 @@ namespace Project2
                 opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            services.AddEntityFramework().AddSqlServer().AddDbContext<ProjectContext>();
-            services.AddTransient<ProjectAppSeedData>();
+            services.AddEntityFramework().AddSqlServer().AddDbContext<ToDoContext>();
+            services.AddTransient<ToDoAppSeedData>();
+            services.AddScoped<IToDoRepository, ToDoRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ProjectAppSeedData seeder)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ToDoAppSeedData seeder)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseIISPlatformHandler();
-
             app.UseDefaultFiles();
 
             app.UseStaticFiles();

@@ -10,44 +10,41 @@ namespace Project2.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "ToDo",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    State = table.Column<bool>(nullable: false),
+                    Tags = table.Column<string>(nullable: true),
+                    dueDate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.PrimaryKey("PK_ToDo", x => x.Id);
                 });
             migrationBuilder.CreateTable(
-                name: "Requirement",
+                name: "Warning",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    ProjectId = table.Column<int>(nullable: true)
+                    State = table.Column<bool>(nullable: false),
+                    Tags = table.Column<string>(nullable: true),
+                    dueDate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Requirement", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Requirement_Project_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Project",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Warning", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("Requirement");
-            migrationBuilder.DropTable("Project");
+            migrationBuilder.DropTable("ToDo");
+            migrationBuilder.DropTable("Warning");
         }
     }
 }

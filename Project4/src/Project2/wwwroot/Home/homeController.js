@@ -3,45 +3,119 @@
 
     angular
         .module('app')
-        .controller('homeController', function ($scope, userGithubService, repoGithubService) {
+        .controller('homeController', function ($scope, apiService) {
             $scope.title = 'homeController';
-            $scope.searchType = 'repo';
-            $scope.searchText = '';
-            $scope.data = '';
-            $scope.pageNumber = 1;
-            $scope.searchPerformed = false;
-            $scope.searchedFor = '';
-            $scope.initialSearch = function () {
-                $scope.pageNumber = 1;
-                $scope.searchPerformed = true;
-                $scope.search();
-            }
-            $scope.search = function () {
-                if ($scope.searchType == 'repo') {
-                    $scope.searchedFor = 'repo';
-                    repoGithubService.getRepo($scope.searchText, $scope.pageNumber).then(function (data) {
+            $scope.data = {};
+            $scope.editingData = {};
+            $scope.date = moment().format("LLLL");
+            $scope.sortType = 'id';
+            $scope.sortReverse = false;
+            $scope.searchDesc = '';
+            $scope.getToDos = function () {
+                    apiService.getToDo().then(function (data) {
                         $scope.data = data;
+                        for (var i = 0, length = $scope.data.length; i < length; i++) {
+                            $scope.editingData[$scope.data[i].id] = false;
+                            var date = data[i].dueDate;
+                            if (date != null) {
+                                data[i].dueDate = new Date(date);
+                            }
+                            if (data[i].state == false && data[i].dueDate < Date.now()) {
+                                data[i].isRed = true;
+                            }
+                            else {
+                                data[i].isRed = false;
+                            }
+                        }
+
+
+
+                        $scope.modify = function (tableData) {
+                            $scope.editingData[tableData.id] = true;
+                        };
+
+
+                        $scope.update = function (tableData) {
+                            $scope.editingData[tableData.id] = false;
+                            apiService.updateToDo(tableData);
+                        };
                     });
+            }
+            $scope.getToDos();
+            $scope.newToDo = function () {
+                var ToDo = {
+                    description: $scope.description,
+                    dueDate: new Date($scope.dueDate),
+                    tags: $scope.tags,
+                    state: false
                 }
-                else if ($scope.searchType == 'user') {
-                    $scope.searchedFor = 'user';
-                    userGithubService.getUser($scope.searchText, $scope.pageNumber).then(function (data) {
+                apiService.newToDo(ToDo).then(function () {
+                    apiService.getToDo().then(function (data) {
                         $scope.data = data;
+                        for (var i = 0, length = $scope.data.length; i < length; i++) {
+                            $scope.editingData[$scope.data[i].id] = false;
+                            var date = data[i].dueDate;
+                            if (date != null) {
+                                data[i].dueDate = new Date(date);
+                            }
+                            if (data[i].state == false && data[i].dueDate < Date.now()) {
+                                data[i].isRed = true;
+                            }
+                            else {
+                                data[i].isRed = false;
+                            }
+                        }
+
+
+                        $scope.modify = function (tableData) {
+                            $scope.editingData[tableData.id] = true;
+                        };
+
+
+                        $scope.update = function (tableData) {
+                            $scope.editingData[tableData.id] = false;
+                            apiService.updateToDo(tableData);
+                        };
                     });
-                }
-                else {
-                    toastr.warning('oops');
-                }
+                });
             }
-            $scope.nextPage = function () {
-                $scope.pageNumber++;
-                $scope.search();
+            
+            $scope.completeToDo = function (tableData) {
+                tableData.state = true;
+                apiService.updateToDo(tableData);
             }
-            $scope.prevPage = function () {
-                if ($scope.pageNumber != 1) {
-                    $scope.pageNumber--;
-                    $scope.search();
-                }
+
+            $scope.removeToDo = function (tableData) {
+                apiService.removeToDo(tableData).then(function () {
+                    apiService.getToDo().then(function (data) {
+                        $scope.data = data;
+                        for (var i = 0, length = $scope.data.length; i < length; i++) {
+                            $scope.editingData[$scope.data[i].id] = false;
+                            var date = data[i].dueDate;
+                            if (date != null) {
+                                data[i].dueDate = new Date(date);
+                            }
+                            if (data[i].state == false && data[i].dueDate < Date.now()) {
+                                data[i].isRed = true;
+                            }
+                            else {
+                                data[i].isRed = false;
+                            }
+                        }
+
+
+                        $scope.modify = function (tableData) {
+                            $scope.editingData[tableData.id] = true;
+                        };
+
+
+                        $scope.update = function (tableData) {
+                            $scope.editingData[tableData.id] = false;
+                            apiService.updateToDo(tableData);
+                        };
+                    });
+                });
             }
+
         });   
 })();
