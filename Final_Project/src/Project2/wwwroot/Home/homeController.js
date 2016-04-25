@@ -14,6 +14,8 @@
             $scope.getWarning = function () {
                 apiService.getWarning().then(function (data) {
                     $scope.warning = data[0];
+                }).then(function () {
+                    $scope.getToDos();
                 })
             }
             $scope.getWarning();
@@ -23,38 +25,28 @@
                         for (var i = 0, length = $scope.data.length; i < length; i++) {
                             $scope.editingData[$scope.data[i].id] = false;
                             var date = data[i].dueDate;
-                            var hour = warning.hours * 60 * 60 * 1000;
-                            var minutes = warning.minutes * 60 * 1000;
-                            var time = hours + minutes;
+                            var hours = $scope.warning.hours * 60 * 60 * 1000;
+                            var minutes = $scope.warning.minutes * 60 * 1000;
+                            $scope.timeWarn = hours + minutes;
+                            $scope.time = new Date(dateMeow + $scope.timeWarn);
                             if (date != null) {
                                 data[i].dueDate = new Date(date);
                             }
-                            if (data[i].state == false && (data[i].dueDate - time) < time) {
+                            if (data[i].state == false && data[i].dueDate < $scope.time) {
                                 data[i].isYellow = true;
                             }
                             if (data[i].state == false && data[i].dueDate < Date.now()) {
                                 data[i].isRed = true;
+                                data[i].isYellow = false;
                             }
-                            else {
+                            else if (data[i].state == false && data[i].dueDate > Date.now() && data[i].dueDate > $scope.time) {
                                 data[i].isRed = false;
                                 data[i].isYellow = false;
                             }
                         }
-
-
-
-                        $scope.modify = function (tableData) {
-                            $scope.editingData[tableData.id] = true;
-                        };
-
-
-                        $scope.update = function (tableData) {
-                            $scope.editingData[tableData.id] = false;
-                            apiService.updateToDo(tableData);
-                        };
                     });
             }
-            $scope.getToDos();
+            
             $scope.newToDo = function () {
                 var ToDo = {
                     description: $scope.description,
@@ -68,27 +60,25 @@
                         for (var i = 0, length = $scope.data.length; i < length; i++) {
                             $scope.editingData[$scope.data[i].id] = false;
                             var date = data[i].dueDate;
+                            var hours = $scope.warning.hours * 60 * 60 * 1000;
+                            var minutes = $scope.warning.minutes * 60 * 1000;
+                            $scope.timeWarn = hours + minutes;
+                            $scope.time = new Date(dateMeow + $scope.timeWarn);
                             if (date != null) {
                                 data[i].dueDate = new Date(date);
                             }
+                            if (data[i].state == false && data[i].dueDate < $scope.time) {
+                                data[i].isYellow = true;
+                            }
                             if (data[i].state == false && data[i].dueDate < Date.now()) {
                                 data[i].isRed = true;
+                                data[i].isYellow = false;
                             }
-                            else {
+                            else if (data[i].state == false && data[i].dueDate > Date.now() && data[i].dueDate > $scope.time) {
                                 data[i].isRed = false;
+                                data[i].isYellow = false;
                             }
                         }
-
-
-                        $scope.modify = function (tableData) {
-                            $scope.editingData[tableData.id] = true;
-                        };
-
-
-                        $scope.update = function (tableData) {
-                            $scope.editingData[tableData.id] = false;
-                            apiService.updateToDo(tableData);
-                        };
                     });
                 });
             }
@@ -105,36 +95,71 @@
                         for (var i = 0, length = $scope.data.length; i < length; i++) {
                             $scope.editingData[$scope.data[i].id] = false;
                             var date = data[i].dueDate;
+                            var hours = $scope.warning.hours * 60 * 60 * 1000;
+                            var minutes = $scope.warning.minutes * 60 * 1000;
+                            $scope.timeWarn = hours + minutes;
+                            $scope.time = new Date(dateMeow + $scope.timeWarn);
                             if (date != null) {
                                 data[i].dueDate = new Date(date);
                             }
+                            if (data[i].state == false && data[i].dueDate < $scope.time) {
+                                data[i].isYellow = true;
+                            }
                             if (data[i].state == false && data[i].dueDate < Date.now()) {
                                 data[i].isRed = true;
+                                data[i].isYellow = false;
                             }
-                            else {
+                            else if (data[i].state == false && data[i].dueDate > Date.now() && data[i].dueDate > $scope.time) {
                                 data[i].isRed = false;
+                                data[i].isYellow = false;
                             }
                         }
-
-
-                        $scope.modify = function (tableData) {
-                            $scope.editingData[tableData.id] = true;
-                        };
-
-
-                        $scope.update = function (tableData) {
-                            $scope.editingData[tableData.id] = false;
-                            apiService.updateToDo(tableData);
-                        };
                     });
                 });
             }
+
+            $scope.modify = function (tableData) {
+                $scope.editingData[tableData.id] = true;
+            };
+
+
+            $scope.update = function (tableData) {
+                $scope.editingData[tableData.id] = false;
+                apiService.updateToDo(tableData).then(function () {
+                    apiService.getToDo().then(function (data) {
+                        $scope.data = data;
+                        for (var i = 0, length = $scope.data.length; i < length; i++) {
+                            $scope.editingData[$scope.data[i].id] = false;
+                            var date = data[i].dueDate;
+                            var hours = $scope.warning.hours * 60 * 60 * 1000;
+                            var minutes = $scope.warning.minutes * 60 * 1000;
+                            $scope.timeWarn = hours + minutes;
+                            $scope.time = new Date(dateMeow + $scope.timeWarn);
+                            if (date != null) {
+                                data[i].dueDate = new Date(date);
+                            }
+                            if (data[i].state == false && data[i].dueDate < $scope.time) {
+                                data[i].isYellow = true;
+                            }
+                            if (data[i].state == false && data[i].dueDate < Date.now()) {
+                                data[i].isRed = true;
+                                data[i].isYellow = false;
+                            }
+                            else if (data[i].state == false && data[i].dueDate > Date.now() && data[i].dueDate > $scope.time) {
+                                data[i].isRed = false;
+                                data[i].isYellow = false;
+                            }
+                        }
+                    });
+                });
+            };
+
             var datetime = null,
-                date = null;
+                dateMeow = null;
 
             var update = function () {
-                date = moment(new Date())
-                datetime.html(date.format('dddd, MMMM Do YYYY, h:mm:ss a'));
+                dateMeow = moment(new Date())
+                datetime.html(dateMeow.format('dddd, MMMM Do YYYY, h:mm:ss a'));
             };
 
             $(document).ready(function () {
@@ -163,7 +188,33 @@
 
                 modalInstance.result.then(function (selectedItem) {
                     $scope.warning = selectedItem;
-                    apiService.updateWarning(selectedItem);
+                    apiService.updateWarning(selectedItem).then(function () {
+                        apiService.getToDo().then(function (data) {
+                            $scope.data = data;
+                            for (var i = 0, length = $scope.data.length; i < length; i++) {
+                                $scope.editingData[$scope.data[i].id] = false;
+                                var date = data[i].dueDate;
+                                var hours = $scope.warning.hours * 60 * 60 * 1000;
+                                var minutes = $scope.warning.minutes * 60 * 1000;
+                                $scope.timeWarn = hours + minutes;
+                                $scope.time = new Date(dateMeow + $scope.timeWarn);
+                                if (date != null) {
+                                    data[i].dueDate = new Date(date);
+                                }
+                                if (data[i].state == false && data[i].dueDate < $scope.time) {
+                                    data[i].isYellow = true;
+                                }
+                                if (data[i].state == false && data[i].dueDate < Date.now()) {
+                                    data[i].isRed = true;
+                                    data[i].isYellow = false;
+                                }
+                                else if (data[i].state == false && data[i].dueDate > Date.now() && data[i].dueDate > $scope.time) {
+                                    data[i].isRed = false;
+                                    data[i].isYellow = false;
+                                }
+                            }
+                        });
+                    });
                 });
             };
 

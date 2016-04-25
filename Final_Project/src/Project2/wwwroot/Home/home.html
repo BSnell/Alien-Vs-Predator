@@ -80,8 +80,8 @@
             </td>
             <td>
                 <div ng-hide="editingData[x.id]">
-                    <font color="red" ng-show="x.isRed == true">{{x.description}}</font>
-                    <font color="yellow" ng-show="x.isYellow == true">{{x.description}}</font>
+                    <font color="#C11B17" ng-show="x.isRed == true">{{x.description}}</font>
+                    <font color="#EAC117" ng-show="x.isYellow == true">{{x.description}}</font>
                     <font color="black" ng-show="x.isRed == false && x.isYellow == false">{{x.description}}</font>
                 </div>
                 <div ng-show="editingData[x.id]"><input type="text" ng-model="x.description" /></div>
