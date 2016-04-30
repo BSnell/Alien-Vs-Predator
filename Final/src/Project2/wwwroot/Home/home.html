@@ -8,17 +8,17 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
-                        <input type="text" class="form-control" placeholder="Hours before warning" ng-model="hours" required>
-                        <input type="text" class="form-control" placeholder="Minutes before warning" ng-model="minutes" required>
+                        <input type="number" class="form-control" placeholder="Days before warning" ng-model="days" required>
+                        <input type="number" class="form-control" placeholder="Hours before warning" ng-model="hours" required>
                     </div>
                 </div>
             </form>
             Current: 
             <br />
             <b>
-                Hours: {{warning.hours}}
+                Days: {{warning.days}}
                 <br />
-                Minutes: {{warning.minutes}}
+                Hours: {{warning.hours}}
             </b>
         </div>
         <div class="modal-footer">
@@ -30,55 +30,55 @@
         ToDos
     </h1>
     <div id="datetime"></div>
-    <h3>
-        Incomplete ToDos
-    </h3>
+    <br />
     <form>
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                <input type="text" class="form-control" placeholder="Search ToDo Description" ng-model="searchDesc">
+                <input type="text" class="form-control" placeholder="Search ToDo Description and Tags" ng-model="searchStuff">
             </div>
         </div>
     </form>
+    <h2>
+        Incomplete ToDos
+    </h2>
     <table class="table table-striped" ng-if="data.length > 0">
         <tr>
-            <th>
+            <th valign="middle">
                 <a href="#" ng-click="sortType = 'id'; sortReverse = !sortReverse">
                     ID
                     <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </th>
-            <th>
+            <th valign="middle">
                 <a href="#" ng-click="sortType = 'description'; sortReverse = !sortReverse">
                     Description
                     <span ng-show="sortType == 'description' && !sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'description' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </th>
-            <th>
+            <th valign="middle">
                 <a href="#" ng-click="sortType = 'dueDate'; sortReverse = !sortReverse">
                     Due Date
                     <span ng-show="sortType == 'dueDate' && !sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'dueDate' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </th>
-            <th>
+            <th valign="middle">
                 Tags
             </th>
-            <th>
-                Complete
-            </th>
-            <th>
+            <th valign="middle">
                 Action
             </th>
         </tr>
         <tr ng-repeat="x in data | filter: { state: 'false' } | orderBy: sortType:sortReverse | filter: searchStuff">
-            <td>
-                {{x.id}}
+            <td valign="middle">
+                <font color="#C11B17" ng-show="x.isRed == true">{{x.id}}</font>
+                <font color="#EAC117" ng-show="x.isYellow == true">{{x.id}}</font>
+                <font color="black" ng-show="x.isRed == false && x.isYellow == false">{{x.id}}</font>
             </td>
-            <td>
+            <td valign="middle">
                 <div ng-hide="editingData[x.id]">
                     <font color="#C11B17" ng-show="x.isRed == true">{{x.description}}</font>
                     <font color="#EAC117" ng-show="x.isYellow == true">{{x.description}}</font>
@@ -86,90 +86,89 @@
                 </div>
                 <div ng-show="editingData[x.id]"><input type="text" ng-model="x.description" /></div>
             </td>
-            <td>
-                <div ng-hide="editingData[x.id]">{{x.dueDate | date:'M/d/yyyy HH:mm a'}}</div>
+            <td valign="middle">
+                <div ng-hide="editingData[x.id]">
+                    <font color="#C11B17" ng-show="x.isRed == true">{{x.dueDate | date:'M/d/yyyy h:mm a'}}</font>
+                    <font color="#EAC117" ng-show="x.isYellow == true">{{x.dueDate | date:'M/d/yyyy h:mm a'}}</font>
+                    <font color="black" ng-show="x.isRed == false && x.isYellow == false">{{x.dueDate | date:'M/d/yyyy h:mm a'}}</font>
+                </div>
                 <div ng-show="editingData[x.id]"><input type="datetime-local" ng-model="x.dueDate" /></div>
             </td>
-            <td>
-                <div ng-hide="editingData[x.id]">{{x.tags}}</div>
+            <td valign="middle">
+                <div ng-hide="editingData[x.id]">
+                    <font color="#C11B17" ng-show="x.isRed == true">{{x.tags}}</font>
+                    <font color="#EAC117" ng-show="x.isYellow == true">{{x.tags}}</font>
+                    <font color="black" ng-show="x.isRed == false && x.isYellow == false">{{x.tags}}</font>
+                </div>
                 <div ng-show="editingData[x.id]"><input type="text" ng-model="x.tags" /></div>
             </td>
-            <td>
-                {{x.state}}
-            </td>
-            <td>
-                <button ng-hide="editingData[x.id]" ng-click="modify(x)">Modify</button>
-                <button ng-show="editingData[x.id]" ng-click="update(x)">Update</button>
-                <button ng-hide="viewField" ng-click="completeToDo(x)">Complete</button>
-                <button ng-hide="viewField" ng-click="removeToDo(x)">Remove</button>
+            <td valign="middle">
+                <button class="btn btn-primary btn-sm" type="button" ng-hide="editingData[x.id]" ng-click="modify(x)">Modify</button>
+                <button class="btn btn-primary btn-sm" type="button" ng-show="editingData[x.id]" ng-click="update(x)">Update</button>
+                <button class="btn btn-primary btn-sm" type="button" ng-hide="viewField" ng-click="completeToDo(x)">Complete</button>
+                <button class="btn btn-primary btn-sm" type="button" ng-hide="viewField" ng-click="removeToDo(x)">Remove</button>
             </td>
         </tr>
     </table>
     <div ng-if="!data.length > 0">
         No ToDos found.
     </div>
-    <h3>
+    <h2>
         Complete ToDos
-    </h3>
-    <table class="table table-striped" ng-if="data.length > 0">
+    </h2>
+    <table class="table table-striped" ng-if="data.length > 0 && completeCount > 0">
         <tr>
-            <th>
+            <th valign="middle">
                 <a href="#" ng-click="sortType = 'id'; sortReverse = !sortReverse">
                     ID
                     <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </th>
-            <th>
+            <th valign="middle">
                 <a href="#" ng-click="sortType = 'description'; sortReverse = !sortReverse">
                     Description
                     <span ng-show="sortType == 'description' && !sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'description' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </th>
-            <th>
+            <th valign="middle">
                 <a href="#" ng-click="sortType = 'dueDate'; sortReverse = !sortReverse">
                     Due Date
                     <span ng-show="sortType == 'dueDate' && !sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'dueDate' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </th>
-            <th>
+            <th valign="middle">
                 Tags
             </th>
-            <th>
-                Complete
-            </th>
-            <th>
+            <th valign="middle">
                 Action
             </th>
         </tr>
         <tr ng-repeat="x in data | filter: { state: 'true' } | orderBy:sortType:sortReverse | filter: searchDesc">
-            <td>
+            <td valign="middle">
                 {{x.id}}
             </td>
-            <td>
+            <td valign="middle">
                 <div ng-hide="editingData[x.id]">{{x.description}}</div>
                 <div ng-show="editingData[x.id]"><input type="text" ng-model="x.description" /></div>
             </td>
-            <td>
-                <div ng-hide="editingData[x.id]">{{x.dueDate | date:'M/d/yyyy HH:mm'}}</div>
+            <td valign="middle">
+                <div ng-hide="editingData[x.id]">{{x.dueDate | date:'M/d/yyyy h:mm a'}}</div>
                 <div ng-show="editingData[x.id]"><input type="datetime-local" ng-model="x.dueDate" /></div>
             </td>
-            <td>
+            <td valign="middle">
                 <div ng-hide="editingData[x.id]">{{x.tags}}</div>
                 <div ng-show="editingData[x.id]"><input type="text" ng-model="x.tags" /></div>
             </td>
-            <td>
-                {{x.state}}
-            </td>
-            <td>
-                <button ng-hide="viewField" ng-click="removeToDo(x)">Remove</button>
+            <td valign="middle">
+                <button class="btn btn-primary btn-sm" type="button" ng-hide="viewField" ng-click="removeToDo(x)">Remove</button>
             </td>
         </tr>
     </table>
-    <div ng-if="!data.length > 0">
-        No ToDos found.
+    <div ng-if="!data.length > 0 || completeCount == 0">
+        No ToDos completed yet. Get to work!!
     </div>
     <br />
     <form method="get" ng-submit="newToDo()">
@@ -191,6 +190,6 @@
     </form>
     <br />
     <div>
-        <button type="button" class="btn btn-default" ng-click="open()">Change Warning Threshold</button>
+        <button type="button" class="btn btn-warning" ng-click="open()">Change Warning Threshold</button>
     </div>
 </body>

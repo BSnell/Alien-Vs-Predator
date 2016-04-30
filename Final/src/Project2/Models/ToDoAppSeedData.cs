@@ -35,8 +35,8 @@ namespace Project2.Models
             {
                 _context.Add(new warningTime()
                 {
-                    hours = 2,
-                    minutes = 0
+                    days = 2,
+                    hours = 0
                 });
                 _context.SaveChanges();
             }

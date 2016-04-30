@@ -65,11 +65,11 @@ namespace Project2.Controllers
             _repository.Update(todo);
         }
 
-        [HttpPut("{hours}/{minutes}")]
-        public void PutWarning(int hours, int minutes)
+        [HttpPut("{days}/{hours}")]
+        public void PutWarning(int days, int hours)
         {
 
-            _repository.UpdateWarning(hours, minutes);
+            _repository.UpdateWarning(days, hours);
         }
 
         // DELETE api/project/5

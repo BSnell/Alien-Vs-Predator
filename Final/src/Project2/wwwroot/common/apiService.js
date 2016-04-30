@@ -64,7 +64,7 @@
             }
             function updateWarning(warning) {
                 var deferred = $q.defer();
-                $http.put('api/todo/' + warning.hours + '/' + warning.minutes, warning).then(
+                $http.put('api/todo/' + warning.days + '/' + warning.hours, warning).then(
                     function handleSuccess(response) {
                         deferred.resolve(response.data);
                     },

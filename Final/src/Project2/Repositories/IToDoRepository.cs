@@ -13,7 +13,7 @@ namespace Project2.Repositories
         void Delete(int id);
 
         void Update(ToDo todo);
-        void UpdateWarning(int hours, int minutes);
+        void UpdateWarning(int days, int hours);
 
         IEnumerable<ToDo> List();
         IEnumerable<warningTime> ListWarning();

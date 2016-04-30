@@ -41,11 +41,11 @@ namespace Project2.Repositories
             todoToUpdate.State = todo.State;
             _context.SaveChanges();
         }
-        public void UpdateWarning(int hours, int minutes)
+        public void UpdateWarning(int days, int hours)
         {
             var warning = FindWarning(1);
+            warning.days = days;
             warning.hours = hours;
-            warning.minutes = minutes;
             _context.SaveChanges();
         }
 

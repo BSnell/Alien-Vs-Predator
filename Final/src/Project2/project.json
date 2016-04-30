@@ -30,7 +30,9 @@
     "dnx451": { },
     "dnxcore50": { }
   },
-
+  "scripts": {
+    "postrestore": [ "bower install" ]
+  },
   "exclude": [
     "wwwroot",
     "node_modules"
