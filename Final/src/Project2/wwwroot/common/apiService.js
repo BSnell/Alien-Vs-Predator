@@ -3,7 +3,7 @@
 
     angular
         .module('app')
-        .factory('apiService', function ($q, $http) {
+        .factory('apiService', function ($q, $http, $window) {
 
             var service = {
                 getToDo: getToDo,
@@ -11,14 +11,15 @@
                 updateToDo: updateToDo,
                 removeToDo: removeToDo,
                 getWarning: getWarning,
-                updateWarning: updateWarning
+                updateWarning: updateWarning,
+                attemptLogin: attemptLogin
             };
 
             return service;
 
-            function getToDo() {
+            function getToDo(userName) {
                 var deferred = $q.defer();
-                $http.get('api/todo').then(
+                $http.get('api/todo/' + userName).then(
                     function handleSuccess(response) {
                         deferred.resolve(response.data);
                     },
@@ -51,6 +52,20 @@
                     });
                 return deferred.promise;
             }
+
+            function attemptLogin(data) {
+                var deferred = $q.defer();
+                $http.post('api/login', data).then(
+                    function handleSuccess(response) {
+                        $window.location.href = '/#/home';
+                        deferred.resolve(response.data);
+                    },
+                    function handleError(response) {
+                        toastr.warning("Login Failed, try again.");
+                    });
+                return deferred.promise;
+            }
+
             function updateToDo(todo) {
                 var deferred = $q.defer();
                 $http.put('api/todo', todo).then(

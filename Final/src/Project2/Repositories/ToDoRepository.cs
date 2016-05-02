@@ -49,9 +49,9 @@ namespace Project2.Repositories
             _context.SaveChanges();
         }
 
-        public IEnumerable<ToDo> List()
+        public IEnumerable<ToDo> List(string userName)
         {
-            var ToDos = _context.ToDos.ToList();
+            var ToDos = _context.ToDos.Where(p => p.UserName == userName);
             return ToDos;
         }
         public IEnumerable<warningTime> ListWarning()

@@ -3,8 +3,9 @@
 
     angular
         .module('app')
-        .controller('homeController', function ($scope, apiService, $uibModal, $log) {
+        .controller('homeController', function ($rootScope, $scope, apiService, $uibModal, $log) {
             $scope.title = 'homeController';
+            $scope.userName = $rootScope.userName;
             $scope.warning = {};
             $scope.data = {};
             $scope.editingData = {};
@@ -50,7 +51,7 @@
             }
             
             $scope.getToDos = function () {
-                apiService.getToDo().then(function (data) {
+                apiService.getToDo($scope.userName).then(function (data) {
                     $scope.data = data;
                     dataProcess(data);
                 });
@@ -66,7 +67,7 @@
                     state: false
                 }
                 apiService.newToDo(ToDo).then(function () {
-                    apiService.getToDo().then(function (data) {
+                    apiService.getToDo($scope.userName).then(function (data) {
                         $scope.data = data;
                         dataProcess(data);
                     });
@@ -80,7 +81,7 @@
 
             $scope.removeToDo = function (tableData) {
                 apiService.removeToDo(tableData).then(function () {
-                    apiService.getToDo().then(function (data) {
+                    apiService.getToDo($scope.userName).then(function (data) {
                         $scope.data = data;
                         dataProcess(data);
                     });
@@ -95,7 +96,7 @@
             $scope.update = function (tableData) {
                 $scope.editingData[tableData.id] = false;
                 apiService.updateToDo(tableData).then(function () {
-                    apiService.getToDo().then(function (data) {
+                    apiService.getToDo($scope.userName).then(function (data) {
                         $scope.data = data;
                         dataProcess(data);
                     });
@@ -137,7 +138,7 @@
                 modalInstance.result.then(function (selectedItem) {
                     $scope.warning = selectedItem;
                     apiService.updateWarning(selectedItem).then(function () {
-                        apiService.getToDo().then(function (data) {
+                        apiService.getToDo($scope.userName).then(function (data) {
                             $scope.data = data;
                             dataProcess(data);
                         });

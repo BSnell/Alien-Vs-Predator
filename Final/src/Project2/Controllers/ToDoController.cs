@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Project2.Models;
 using Project2.Repositories;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project2.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ToDoController : Controller
     {
         private IToDoRepository _repository;
@@ -22,10 +24,10 @@ namespace Project2.Controllers
         }
 
         // GET: api/project
-        [HttpGet]
-        public IEnumerable<ToDo> Get()
+        [HttpGet("{userName}")]
+        public IEnumerable<ToDo> Get(string userName)
         {
-            var ToDos = _repository.List();
+            var ToDos = _repository.List(userName);
             return ToDos;
         }
         [HttpGet("warning")]
@@ -33,13 +35,6 @@ namespace Project2.Controllers
         {
             var warning = _repository.ListWarning();
             return warning;
-        }
-
-        // GET api/project/0
-        [HttpGet("{id}")]
-        public ToDo Get(int id)
-        {
-            return _repository.FindById(id);
         }
 
         // GET api/project/search/{queryString}

@@ -15,7 +15,7 @@ namespace Project2.Repositories
         void Update(ToDo todo);
         void UpdateWarning(int days, int hours);
 
-        IEnumerable<ToDo> List();
+        IEnumerable<ToDo> List(string userName);
         IEnumerable<warningTime> ListWarning();
 
         ToDo FindById(int id);
