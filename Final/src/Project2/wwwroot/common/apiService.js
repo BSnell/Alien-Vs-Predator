@@ -19,11 +19,15 @@
 
             function getToDo(userName) {
                 var deferred = $q.defer();
+                if (userName == null) {
+                    $window.location.href = '/#/';
+                }
                 $http.get('api/todo/' + userName).then(
                     function handleSuccess(response) {
                         deferred.resolve(response.data);
                     },
                     function handleError(response) {
+                        $window.location.href = '/#/';
                         toastr.warning(response.data);
                     });
                 return deferred.promise;

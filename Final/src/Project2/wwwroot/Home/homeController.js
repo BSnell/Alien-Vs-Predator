@@ -64,6 +64,7 @@
                     description: $scope.description,
                     dueDate: new Date($scope.dueDate),
                     tags: $scope.tags,
+                    UserName: $scope.userName,
                     state: false
                 }
                 apiService.newToDo(ToDo).then(function () {
